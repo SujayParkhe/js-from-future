@@ -1,8 +1,14 @@
 // Number
 let age = 29;
+console.log(typeof age);
+
+// Float number
+let piValue = 3.14;
+console.log(typeof piValue);
 
 // String
-let firstName = 'Sujay';
+let firstName = "Sujay";
+console.log(typeof firstName);
 
 // Boolean
 let isJavaScriptFun = true;
