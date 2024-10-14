@@ -1,36 +1,66 @@
 "use strict";
 
-// const message = (document.querySelector(".message").textContent =
-//   "Correct Number!");
-// const number = (document.querySelector(".number").textContent = 13);
-// const score = (document.querySelector(".score").textContent = 15);
-// const guess = document.querySelector(".guess").value;
-// console.log(guess);
-
-const secretNumber = Math.trunc(Math.random() * 20) + 1;
+let secretNumber = Math.trunc(Math.random() * 20) + 1;
 let defaultScore = 20;
-document.querySelector(".number").textContent = secretNumber;
+let defaultHighscore = 0;
+const number = document.querySelector(".number");
 const score = document.querySelector(".score");
+const body = document.querySelector("body");
+const message = document.querySelector(".message");
+const highscore = document.querySelector(".highscore");
+
+const displayMessage = (msg) => {
+  message.textContent = msg;
+};
+
+const updateScore = (newScore) => {
+  score.textContent = newScore;
+};
+
+const handleLoss = () => {
+  displayMessage("You lost the game!");
+  updateScore(0);
+};
 
 const guessNumber = () => {
   const guess = Number(document.querySelector(".guess").value);
-  const message = document.querySelector(".message");
-  console.log(score);
-
   if (!guess) {
-    message.textContent = "No Number";
+    displayMessage("No Number");
   } else if (guess === secretNumber) {
-    message.textContent = "Correct number"
-  } else if (guess > secretNumber) {
-    message.textContent = "Too High!!"
-    defaultScore = defaultScore - 1;
-    score.textContent = defaultScore;
-  } else if (guess < secretNumber) {
-    message.textContent = "Too Low!!"
-    defaultScore = defaultScore - 1;
-    score.textContent = defaultScore;
+    displayMessage("Correct number");
+    number.textContent = secretNumber;
+    body.style.backgroundColor = "#60b347";
+    number.style.width = "30rem";
+    if (defaultScore > defaultHighscore) {
+      defaultHighscore = defaultScore;
+      highscore.textContent = defaultHighscore;
+    }
+  } else if (guess !== secretNumber) {
+    if (defaultScore > 1) {
+      displayMessage(guess > secretNumber ? "Too High!!" : "Too Low!!");
+      defaultScore = defaultScore - 1;
+      updateScore(defaultScore);
+    } else {
+      message.textContent = "You lost the game!";
+      handleLoss();
+    }
   }
+};
+
+const resetGame = () => {
+  let guess = document.querySelector(".guess");
+  secretNumber = Math.trunc(Math.random() * 20) + 1;
+  defaultScore = 20;
+  updateScore(defaultScore);
+  number.textContent = "?";
+  displayMessage("Start guessing...");
+  guess.value = "";
+  body.style.backgroundColor = "#222";
+  number.style.width = "15rem";
 };
 
 const button = document.querySelector(".check");
 button.addEventListener("click", guessNumber);
+
+const resetGameButton = document.querySelector(".again");
+resetGameButton.addEventListener("click", resetGame);
